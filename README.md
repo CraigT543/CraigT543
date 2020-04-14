@@ -17,13 +17,13 @@
     <li>My Amelia Orders Webhook Endpoint</li>
     <li>Function to Update WC Orders to Reflect Amelia Appointments Payment Status -- update_my_wc_orders()</li>
     <li>Function to Update Amelia Orders to Reflect Customer On-line Payment</li>
-<ol>
+</ol>
 <p>The first function, add_users_on_login() will make any new regestered user an Amelia user as well. The schedule hook assumes that you are running WP-Cron (recommended but not required).  The Amelia Orders Webhook requires that you add the webhook into Amelia's admin pannel at settings>integrations>webhooks. Fill in the form thus:</p>
 <ul>
     <li>Name: Update WC Orders</li>
     <li>URL: http://www.YOURWEBSITE.com/wp-json/myameliaorder/v1/author/(?P\d+)</li>  
     <li>Type: Appointment</li>  
     <li>Action: Booking Completed</li>  
-<ul>
+</ul>
 <p>Click to save this and it will run when an appointment booking is completed. Webhooks have a bit of a delay so wait a few minutes and you will see the order created in Woocommerce.  If you have WP-Cron running, every night it will update any changes that you have made in your appointments durring the day.  And it will update any time you enter payments in amelia on the admin pannel and mark them as paid.  This will then be reflected in Woocommerce.</p>
 <p>The last function updates Amelia if a customer makes an on-line payment to the Wordpress Orders Pannel</p>
