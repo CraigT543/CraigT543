@@ -245,7 +245,7 @@ function mysite_woocommerce_order_status_completed( $order_id ) {
 	global $product;
 	//Basic Amelia information for the queries
 	$appdata = $wpdb->get_row($wpdb->prepare(
-		"SELECT a.id aid, a.internalNotes,p.id pid, p.dateTime, p.status, p.gateway, p.gatewayTitle " .
+		"SELECT a.id aid, a.internalNotes, b.price, p.id pid " .
 		"FROM wp_amelia_payments p " .
 		"LEFT JOIN wp_amelia_customer_bookings b " .
 		"ON b.id = p.customerBookingId " .
@@ -257,7 +257,7 @@ function mysite_woocommerce_order_status_completed( $order_id ) {
 		$aid = $appdata->aid;
 		$pid = $appdata->pid;
 		$internalNotes = substr($str, ($pos = strpos($str, '|')) !== false ? $pos + 1 : 0);
-		$dateTime = date('n/j/Y h:m');
+		$dateTime = date('n/j/Y h:m', $unixTimestamp);
 
 		$wpdb->update('wp_amelia_appointments', array( 
 			'internalNotes' => $internalNotes 
@@ -266,9 +266,10 @@ function mysite_woocommerce_order_status_completed( $order_id ) {
 		$wpdb->update( 'wp_amelia_payments', array( 
 			'dateTime' 		=> $dateTime,
 			'status'		=> 'paid',
+			'amount'		=> $appdata->price,
 			'gateway'		=> 'wc',
 			'gatewayTitle'	=> 'PayPal Checkout'
-		), array('id' => $pid), array('%s', '%d'));	
+		), array('id' => $pid), array('%d', '%d', '%d'));	
 	}		
 }
 add_action( 'woocommerce_order_status_completed', 'mysite_woocommerce_order_status_completed', 10, 1 );
